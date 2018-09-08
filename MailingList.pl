@@ -16,6 +16,20 @@ post '/add-email' => sub {
   }
   $pg->db->insert('emails', {email => $email, date_submitted => gmstamp(time)});
   $c->render(text => "Successfully registered");
+  my $domain = $ENV{MAILGUN_DOMAIN};
+  my $api_key = $ENV{MAILGUN_API_KEY};
+  my $command = "curl -s --user 'api:$api_key' " .
+    "https://api.mailgun.net/v3/$domain/messages " .
+    "-F from='Excited User <mailgun\@$domain>' " .
+    "-F to=$email " .
+    "-F subject='Hello' " .
+    "-F text='Testing some Mailgun awesomeness!' ";
+
+  my @files = split ',', $ENV{MAILGUN_FILES};
+  for my $file (@files) {
+    $command .= "-F attachment=\@$file ";
+  }
+  system $command;
 };
 
 app->start;
