@@ -12,6 +12,15 @@ post '/add-email' => sub {
     $c->render(text => "Email address is invalid");
     return;
   }
+  my $number_existing_emails =
+    $pg->db->query('select * from emails where email=?', $email)->rows;
+  if ($number_existing_emails > 0) {
+    # If the user has already signed up, we show a message.
+    $c->render(text => "You have already registered with this email address. " .
+      "If you didn't receive the books in your inbox, contact us at " .
+      "wellcode\@learnhouse.ro");
+    return;
+  }
   $pg->db->insert('emails', {email => $email, date_submitted => gmstamp(time)});
   my $email_text = <<EMAIL_END;
 Hi there,
