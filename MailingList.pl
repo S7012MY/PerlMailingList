@@ -8,6 +8,8 @@ my $pg = Mojo::Pg->new('postgresql:///mailing_list');
 post '/add-email' => sub {
   my $c = shift;
   my $email = $c->param('email');
+  my $first_name = $c->param('firstname');
+  my $last_name = $c->param('lastname');
   if (!Email::Valid->address(-address => $email, -mxcheck => 1)) {
     $c->render(text => "Email address is invalid");
     return;
@@ -21,7 +23,12 @@ post '/add-email' => sub {
       "wellcode\@learnhouse.ro");
     return;
   }
-  $pg->db->insert('emails', {email => $email, date_submitted => gmstamp(time)});
+  $pg->db->insert('emails', {
+    email => $email,
+    first_name => $first_name,
+    last_name => $last_name,
+    date_submitted => gmstamp(time)
+  });
   my $email_text = <<EMAIL_END;
 Hi there,
 
