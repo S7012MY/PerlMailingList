@@ -37,9 +37,9 @@ content that we believe is relevant to you. Keep an eye on our facebook page
 https://facebook.com/wellcode.ro/ and on https://wellcode.com since we will soon
 be launching our starter course in computer programming!
 
-In the meantime, I hope you enjoy those two books I personally prepared to help
+In the meantime, I hope you enjoy this guide I personally prepared to help
 you get a clear picture of your path to being a successful software engineer.
-I have attached them here.
+I have attached it here.
 
 Hope to see you soon on wellcode.com!
 Petru,
@@ -52,7 +52,7 @@ EMAIL_END
     "https://api.mailgun.net/v3/$domain/messages " .
     "-F from='Petru Trimbitas <mailgun\@$domain>' " .
     "-F to=$email " .
-    "-F subject='Here are your books for your WellCode subscription' " .
+    "-F subject='Here is your guide for your WellCode subscription' " .
     "-F text='" . $email_text . "' ";
 
   my @files = split ',', $ENV{MAILGUN_FILES};
