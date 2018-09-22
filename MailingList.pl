@@ -29,30 +29,33 @@ post '/add-email' => sub {
     last_name => $last_name,
     date_submitted => gmstamp(time)
   });
+  if (!defined $first_name) {
+    $first_name = "there";
+  }
   my $email_text = <<EMAIL_END;
-Hi there,
+Hi $first_name,
 
-Thanks for subscribing to our newsletter, we promise we will only send you
-content that we believe is relevant to you. Keep an eye on our facebook page
-https://facebook.com/wellcode.ro/ and on https://wellcode.com since we will soon
-be launching our starter course in computer programming!
+As promised, you can find your guide attached in this email.
 
-In the meantime, I hope you enjoy this guide I personally prepared to help
-you get a clear picture of your path to being a successful software engineer.
-I have attached it here.
+Keep an eye on our facebook page https://facebook.com/wellcode.ro/ and on
+https://wellcode.com since we will soon be launching our starter course in
+computer programming!
+
+In the meantime, I hope you enjoy the guide I personally prepared to help
+you get a clear picture of your path to becoming a successful software engineer.
 
 Hope to see you soon on wellcode.com!
 Petru,
-Co-founder of Wellcode
+Co-founder of WellCode
 EMAIL_END
 
   my $domain = $ENV{MAILGUN_DOMAIN};
   my $api_key = $ENV{MAILGUN_API_KEY};
   my $command = "curl -s --user 'api:$api_key' " .
     "https://api.mailgun.net/v3/$domain/messages " .
-    "-F from='Petru Trimbitas <mailgun\@$domain>' " .
+    "-F from='Petru from WellCode <mailgun\@$domain>' " .
     "-F to=$email " .
-    "-F subject='Here is your guide for your WellCode subscription' " .
+    "-F subject='Here is your \"How to Become a Programmer\" Guide' " .
     "-F text='" . $email_text . "' ";
 
   my @files = split ',', $ENV{MAILGUN_FILES};
